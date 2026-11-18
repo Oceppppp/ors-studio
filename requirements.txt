@@ -1,6 +1,6 @@
 # Runtime dependencies.
 # Minimums deliberately target releases with CPython 3.15 support/wheels.
-fastapi>=0.162.3,<1.0
+fastapi>=0.163.1,<1.0
 # Do not install uvicorn[standard] on this local-only app: the optional native
 # extras are unnecessary and may complicate cross-version Windows installs.
 uvicorn>=0.54.0,<1.0

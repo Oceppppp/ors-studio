@@ -1,0 +1,10 @@
+Origin,Destination,UnitCost
+Factory A,Warehouse 1,8
+Factory A,Warehouse 2,6
+Factory A,Warehouse 3,10
+Factory B,Warehouse 1,9
+Factory B,Warehouse 2,12
+Factory B,Warehouse 3,13
+Factory C,Warehouse 1,14
+Factory C,Warehouse 2,9
+Factory C,Warehouse 3,16

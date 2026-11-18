@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a feature or model improvement.
+title: "[Feature]: "
+labels: [enhancement, needs-triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the analysis or user workflow that is currently difficult.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Mathematical or usability references
+      description: Include formulas, assumptions, or a short example if relevant.
+    validations:
+      required: false

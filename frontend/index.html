@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#142B3B" />
+  <meta name="description" content="Operations Research Studio — integrated production, operations research and quantitative analysis." />
+  <title>ORS Studio — Operations Research Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/ors-console.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><span></span><span></span><span></span><span></span></div>
+        <div><div class="brand-name">ORS<span> Studio</span></div><div class="brand-caption">MODELLING WORKSPACE</div></div>
+      </div>
+      <button class="workspace-switcher" id="workspace-switcher" title="Create a new local project" aria-haspopup="dialog" aria-controls="project-modal">
+        <div class="workspace-icon">W</div>
+        <div class="workspace-copy"><small>WORKSPACE</small><strong id="workspace-name">My ORS Project</strong></div>
+        <span class="chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+      </button>
+      <nav class="nav-group" aria-label="Main navigation">
+        <div class="nav-label">WORKSPACE</div>
+        <button class="nav-link active" data-page="overview"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg></span> Overview</button>
+        <button class="nav-link" data-page="modules"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5h6v6H4zM14 5.5h6v6h-6zM4 15.5h6v4H4zM14 15.5h6v4h-6z"/><path d="M10 8.5h4M7 11.5v4M17 11.5v4"/></svg></span> Analysis modules <span class="nav-count" id="module-count">29</span></button>
+        <button class="nav-link" data-page="data"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="2.5"/><path d="M4 5v6c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V5M4 11v6c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5v-6"/></svg></span> Data center</button>
+        <button class="nav-link" data-page="batch"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="6" height="5" rx="1"/><rect x="14.5" y="15" width="6" height="5" rx="1"/><path d="M9.5 6.5h3a3 3 0 0 1 3 3v2.5M14.5 17.5h-3a3 3 0 0 1-3-3V12"/><path d="m12.5 10 3 2 2-3"/></svg></span> Batch processing <span class="nav-dot" id="batch-dot"></span></button>
+        <div class="nav-label nav-label-spaced">INSIGHTS</div>
+        <button class="nav-link" data-page="history"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5v4h4M12 7v5l3.5 2"/></svg></span> Analysis history</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-card"><div class="local-indicator"></div><div><strong>Local workspace</strong><small>Your data stays on this device</small></div></div>
+        <button class="nav-link" data-page="settings"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19 13.5 1.1.8-1.1 2-1.3-.4a7.5 7.5 0 0 1-1.5.9l-.2 1.4h-2.3l-.4-1.3a7.5 7.5 0 0 1-1.7 0l-.8 1.1-2-1.1.4-1.3a7.5 7.5 0 0 1-.9-1.5l-1.4-.2v-2.3l1.3-.4a7.5 7.5 0 0 1 0-1.7l-1.1-.8 1.1-2 1.3.4a7.5 7.5 0 0 1 1.5-.9l.2-1.4h2.3l.4 1.3a7.5 7.5 0 0 1 1.7 0l.8-1.1 2 1.1-.4 1.3a7.5 7.5 0 0 1 .9 1.5l1.4.2v2.3l-1.3.4a7.5 7.5 0 0 1 0 1.7Z"/></svg></span> Settings</button>
+        <div class="sidebar-footer"><span class="status-led"></span> Local engine <b>v0.4.0</b></div>
+      </div>
+    </aside>
+
+    <main class="main-area" id="main-content" tabindex="-1">
+      <header class="topbar">
+        <div class="topbar-left"><button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="breadcrumbs"><span>Workspace</span><i>/</i><strong id="breadcrumb-current">Overview</strong></div></div>
+        <div class="topbar-right"><div class="server-status" id="engine-status" role="status" aria-live="polite"><span class="status-led"></span> Local engine connected</div><div class="profile-chip" id="profile-chip" aria-label="Current user session"><span class="profile-mark" id="profile-mark" aria-hidden="true">L</span><span id="profile-label">Local session</span></div><button type="button" class="auth-action" id="auth-upgrade-open" hidden>Save workspace</button><button type="button" class="auth-action" id="auth-signout" hidden>Sign out</button></div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="page active" id="page-overview">
+          <div class="page-heading"><div><div class="eyebrow">WORKSPACE</div><h1>Overview</h1><p class="page-subtitle">A clear view of your models, data, and recent runs.</p></div><div class="heading-actions"><button class="btn btn-secondary" id="quick-import"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4.5 15.5v4h15v-4"/></svg></span> Import data</button><button class="btn btn-primary" id="quick-analysis"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span> New analysis</button></div></div>
+          <div class="metric-grid" aria-label="Workspace summary">
+            <article class="metric-card"><span class="metric-label">AVAILABLE MODELS</span><strong class="metric-value" id="metric-modules">29</strong><span class="metric-foot">Across POM & QM</span></article>
+            <article class="metric-card"><span class="metric-label">DATASETS</span><strong class="metric-value" id="metric-datasets">0</strong><span class="metric-foot">Files in this project</span></article>
+            <article class="metric-card"><span class="metric-label">COMPLETED RUNS</span><strong class="metric-value" id="metric-completed">0</strong><span class="metric-foot">Successful analyses</span></article>
+            <article class="metric-card"><span class="metric-label">ACTIVE JOBS</span><strong class="metric-value" id="metric-active">0</strong><span class="metric-foot">Queued or processing</span></article>
+          </div>
+          <div class="content-grid overview-grid">
+            <section class="panel welcome-panel"><div class="welcome-copy"><div class="panel-kicker">START A NEW STUDY</div><h2>Bring a model to the data.</h2><p>Import a spreadsheet, select an operations model, and inspect the assumptions before you run it.</p><div class="welcome-actions"><button class="btn btn-primary" id="welcome-upload">Import a dataset</button><button class="text-button" id="welcome-module">Open model library</button></div></div><div class="workflow-strip" aria-label="Analysis workflow"><div class="workflow-step"><span>01</span><strong>Data</strong><small>Upload & map</small></div><div class="workflow-connector"></div><div class="workflow-step"><span>02</span><strong>Model</strong><small>Set parameters</small></div><div class="workflow-connector"></div><div class="workflow-step"><span>03</span><strong>Result</strong><small>Review & export</small></div></div></section>
+            <section class="panel activity-panel"><div class="panel-header"><div><h3>Recent activity</h3><p>Your latest analysis runs</p></div><button class="text-button" data-go="history">View all</button></div><div id="recent-activity" class="empty-state compact"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></div><strong>No activity yet</strong><span>Your analysis history will appear here.</span></div></section>
+          </div>
+          <section class="panel modules-feature"><div class="panel-header"><div><h3>Explore analysis modules</h3><p>Start with one of the most-used methods</p></div><button class="text-button" data-go="modules">Browse all 29</button></div><div class="featured-grid" id="featured-modules"></div></section>
+        </section>
+
+        <section class="page" id="page-modules">
+          <div class="page-heading"><div><div class="eyebrow">MODEL LIBRARY</div><h1>Analysis modules</h1><p class="page-subtitle">Choose a method and configure its parameters.</p></div><div class="heading-actions"><span class="info-pill"><span class="status-led"></span> 29 modules available</span></div></div>
+          <div class="module-workspace">
+            <aside class="module-browser panel"><div class="search-wrap"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></span><input type="search" id="module-search" placeholder="Search models…" aria-label="Search modules" autocomplete="off" /></div><div class="category-tabs" id="category-tabs"></div><div class="module-list" id="module-list" role="region" aria-label="Available analysis modules"></div></aside>
+            <section class="module-config panel">
+              <div id="module-config-empty" class="empty-state"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg></div><strong>Select a module</strong><span>Choose an analysis from the library to configure it.</span></div>
+              <div id="module-config-content" hidden>
+                <div class="module-config-heading"><div class="module-large-icon" id="selected-module-icon" aria-hidden="true"></div><div class="module-heading-text"><div class="module-category" id="selected-module-category">OPTIMIZATION</div><h2 id="selected-module-name">Linear Programming</h2><p id="selected-module-description"></p></div></div>
+                <div class="readiness-note" id="selected-module-readiness"></div>
+                <div class="form-section"><div class="form-section-title"><div><h3>Input parameters</h3><p>Configure the model using JSON. A working example is preloaded.</p></div><button class="text-button" id="reset-params">Reset example</button></div><textarea id="params-editor" class="code-editor" spellcheck="false" aria-label="Analysis parameters"></textarea><div class="editor-help">Tip: Edit the values below. Use valid JSON syntax; strings require double quotes.</div></div>
+                <div class="form-section data-bind-section"><div class="form-section-title"><div><h3>Connect a dataset <span class="optional">OPTIONAL</span></h3><p>Replace a parameter array with a numeric column from an uploaded dataset.</p></div></div><div class="binding-controls"><select id="binding-dataset" aria-label="Select dataset"><option value="">No dataset selected</option></select><select id="binding-target" aria-label="Select parameter to replace"><option value="">Parameter to replace</option></select><select id="binding-column" aria-label="Select numeric dataset column"><option value="">Dataset column</option></select><button type="button" class="btn btn-secondary btn-small" id="apply-binding">Apply mapping</button></div><div class="binding-summary" id="binding-summary">No dataset mapping applied.</div></div>
+                <div class="forecast-tools" id="forecast-tools" hidden><div><strong>Compare forecasting methods</strong><small>Backtest MA, WMA, SES, Linear Trend and Naive using a rolling holdout.</small></div><button type="button" class="btn btn-secondary btn-small" id="compare-forecast">Compare methods</button></div>
+                <div class="config-footer"><div class="run-hint"><span class="status-led"></span> Runs locally on this device</div><div class="config-actions"><button type="button" class="btn btn-secondary" id="add-to-batch"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span> Add to batch</button><button type="button" class="btn btn-primary" id="run-analysis">Run analysis <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></div></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page" id="page-data">
+          <div class="page-heading"><div><div class="eyebrow">DATA WORKSPACE</div><h1>Data center</h1><p class="page-subtitle">Import, preview, and manage your analysis datasets.</p></div><div class="heading-actions"><span class="info-pill">CSV · XLSX · up to 20 MB</span></div></div>
+          <div class="data-layout"><section class="panel import-panel"><div class="panel-header"><div><h3>Import a dataset</h3><p>Upload Excel or CSV and use the data in your workspace.</p></div><span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4.5 15.5v4h15v-4"/></svg></span></div><label class="dropzone" id="dropzone"><input type="file" id="upload-file" accept=".csv,.xlsx" class="visually-hidden-file" aria-label="Choose a CSV or Excel file"/><span class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4.5 15.5v4h15v-4"/></svg></span><strong>Drop a file here or <u>browse</u></strong><small>Supported formats: .xlsx and .csv · Maximum file size 20 MB</small><span class="selected-file" id="selected-file"></span></label><div class="sheet-row" id="sheet-row" hidden><label for="sheet-select">Worksheet</label><select id="sheet-select"></select></div><button class="btn btn-primary full-width" id="upload-button" disabled>Import dataset</button><div class="import-message" id="import-message" role="status" aria-live="polite"></div></section>
+          <section class="panel dataset-panel"><div class="panel-header"><div><h3>Saved datasets</h3><p>Reusable data for your analyses</p></div><span class="count-chip" id="dataset-count">0 files</span></div><div id="dataset-list" class="dataset-list"><div class="empty-state compact"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20.5H6zM14 3.5v4h4M9 12h6M9 16h6"/></svg></div><strong>No datasets yet</strong><span>Upload a CSV or Excel file to get started.</span></div></div></section></div>
+          <section class="panel preview-panel" id="dataset-preview-panel" hidden><div class="panel-header"><div><h3 id="preview-title">Dataset preview</h3><p id="preview-meta"></p></div><button class="icon-button" id="close-preview" aria-label="Close preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div class="table-wrap" id="dataset-preview"></div><div id="dataset-warnings" class="warning-list" role="status" aria-live="polite"></div></section>
+        </section>
+
+        <section class="page" id="page-batch">
+          <div class="page-heading"><div><div class="eyebrow">PARALLEL RUNS</div><h1>Batch processing</h1><p class="page-subtitle">Prepare several analyses and run independent jobs in parallel.</p></div><div class="heading-actions"><span class="info-pill">Up to 4 parallel workers</span></div></div>
+          <div class="batch-layout"><section class="panel batch-builder"><div class="panel-header"><div><h3>Prepared analyses</h3><p>Add configured models from the Analysis modules page.</p></div><span class="count-chip" id="batch-count">0 tasks</span></div><div id="batch-items" class="batch-items"><div class="empty-state compact"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="6" height="5" rx="1"/><rect x="14.5" y="15" width="6" height="5" rx="1"/><path d="M9.5 6.5h3a3 3 0 0 1 3 3v2.5M14.5 17.5h-3a3 3 0 0 1-3-3V12"/></svg></div><strong>Your batch is empty</strong><span>Configure a module and select “Add to batch”.</span><button class="btn btn-secondary btn-small" data-go="modules">Explore modules</button></div></div><div class="batch-footer"><button class="btn btn-ghost" id="clear-batch">Clear list</button><button type="button" class="btn btn-primary" id="run-batch" disabled>Run all analyses</button></div></section>
+          <section class="panel queue-panel"><div class="panel-header"><div><h3>Job queue</h3><p>Live status of submitted work</p></div><button class="text-button" id="refresh-jobs"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M19 12a7.5 7.5 0 1 1-2-5.1L20 12"/></svg></span> Refresh</button></div><div id="job-list" class="job-list"><div class="empty-state compact"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></div><strong>No jobs submitted</strong><span>Submitted analysis jobs will show here.</span></div></div></section></div>
+        </section>
+
+        <section class="page" id="page-history">
+          <div class="page-heading"><div><div class="eyebrow">RUN LOG</div><h1>Analysis history</h1><p class="page-subtitle">Review results, reopen completed analyses, and export reports.</p></div><button class="btn btn-secondary" id="refresh-history"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M19 12a7.5 7.5 0 1 1-2-5.1L20 12"/></svg></span> Refresh</button></div>
+          <section class="panel history-panel"><div class="history-filters"><input type="search" id="history-search" placeholder="Search analyses…" aria-label="Search analyses" autocomplete="off"/><select id="history-status" aria-label="Filter by status"><option value="">All statuses</option><option>SUCCEEDED</option><option>FAILED</option><option>RUNNING</option><option>QUEUED</option></select></div><div class="table-wrap" id="history-table"><div class="empty-state compact"><strong>No analysis history</strong><span>Run an analysis to create your first record.</span></div></div></section>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="page-heading"><div><div class="eyebrow">APPLICATION</div><h1>Settings</h1><p class="page-subtitle">Application information and local storage details.</p></div></div>
+          <section class="panel settings-panel"><div class="settings-row"><div><h3>Application</h3><p>Operations Research Studio</p></div><span class="settings-value">Version 0.4.0</span></div><div class="settings-row"><div><h3>Execution mode</h3><p>Local-first · calculations run on this computer</p></div><span class="status-tag success">LOCAL</span></div><div class="settings-row"><div><h3>Data storage</h3><p id="storage-path">Database location is managed by the local runtime.</p></div><span class="settings-value">SQLite</span></div><div class="settings-row"><div><h3>Parallel workers</h3><p>Independent batch analyses run concurrently.</p></div><span class="settings-value" id="worker-setting">4</span></div><div class="settings-row"><div><h3>Module scope</h3><p>Each module displays its supported model and limitations.</p></div><span class="settings-value">29 modules</span></div></section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="false"></div>
+  <div class="modal-backdrop" id="project-modal" hidden>
+    <form class="project-dialog panel" id="project-form" role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" aria-describedby="project-dialog-description">
+      <div class="eyebrow">WORKSPACE</div>
+      <h2 id="project-dialog-title">Create a project</h2>
+      <p id="project-dialog-description">Start a separate workspace for a new analysis.</p>
+      <label for="project-name">Project name</label>
+      <input id="project-name" name="project_name" type="text" maxlength="100" required autocomplete="off" placeholder="e.g. Production planning study" />
+      <div class="project-dialog-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 20 7v5.5c0 4.2-3.2 7-8 8.5-4.8-1.5-8-4.3-8-8.5V7l8-3.5Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg> Projects and datasets stay private to your workspace.</div>
+      <div class="project-dialog-actions"><button type="button" class="btn btn-secondary" id="cancel-project">Cancel</button><button type="submit" class="btn btn-primary" id="create-project-button">Create project</button></div>
+    </form>
+  </div>
+  <div class="modal-backdrop" id="result-modal" hidden><div class="result-modal panel" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-describedby="result-subtitle"><div class="result-modal-header"><div><div class="eyebrow">ANALYSIS OUTPUT</div><h2 id="result-title">Analysis result</h2><p id="result-subtitle"></p></div><button class="icon-button" id="close-result" aria-label="Close results"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div class="result-content" id="result-content"></div><div class="result-footer"><div class="export-actions"><button class="btn btn-secondary btn-small" data-export="xlsx">Excel</button><button class="btn btn-secondary btn-small" data-export="csv">CSV</button><button class="btn btn-secondary btn-small" data-export="pdf">PDF</button></div><button class="btn btn-primary" id="result-done">Done</button></div></div></div>
+
+  <section class="auth-gate" id="auth-gate" hidden aria-labelledby="auth-title">
+    <div class="auth-gate-panel">
+      <div class="auth-gate-brand"><div class="brand-mark"><span></span><span></span><span></span><span></span></div><div><div class="brand-name">ORS<span> Studio</span></div><div class="brand-caption">OPERATIONS RESEARCH WORKSPACE</div></div></div>
+      <div class="auth-gate-copy"><div class="eyebrow">PUBLIC WEB WORKSPACE</div><h1 id="auth-title">Make better decisions with your data.</h1><p>Run operations research models, compare alternatives, and keep your work in a private workspace.</p></div>
+      <div class="auth-gate-tabs" role="tablist" aria-label="Account access">
+        <button type="button" class="auth-tab active" id="auth-tab-login" role="tab" aria-selected="true" aria-controls="auth-login-panel">Sign in</button>
+        <button type="button" class="auth-tab" id="auth-tab-register" role="tab" aria-selected="false" aria-controls="auth-register-panel">Create account</button>
+      </div>
+      <form id="auth-login-panel" class="auth-form" autocomplete="on">
+        <label for="auth-login-email">Email address</label><input id="auth-login-email" name="email" type="email" autocomplete="username" required maxlength="320" placeholder="you@example.com" />
+        <label for="auth-login-password">Password</label><input id="auth-login-password" name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Your password" />
+        <button class="btn btn-primary full-width" type="submit" id="auth-login-submit">Sign in</button>
+      </form>
+      <form id="auth-register-panel" class="auth-form" autocomplete="on" hidden>
+        <label for="auth-register-name">Display name</label><input id="auth-register-name" name="display_name" type="text" autocomplete="name" required maxlength="120" placeholder="Your name" />
+        <label for="auth-register-email">Email address</label><input id="auth-register-email" name="email" type="email" autocomplete="email" required maxlength="320" placeholder="you@example.com" />
+        <label for="auth-register-password">Password</label><input id="auth-register-password" name="password" type="password" autocomplete="new-password" required minlength="12" maxlength="128" placeholder="At least 12 characters" />
+        <small class="auth-help">Use at least 12 characters, including letters and numbers.</small>
+        <button class="btn btn-primary full-width" type="submit" id="auth-register-submit">Create account</button>
+      </form>
+      <div id="auth-error" class="auth-error" role="alert" hidden></div>
+      <div class="auth-divider"><span>or</span></div>
+      <button type="button" class="btn btn-secondary full-width" id="auth-guest">Continue as guest</button>
+      <p class="auth-footnote">Guest workspaces are temporary and are removed after 24 hours. Accounts are in public beta: email verification and password recovery are not available yet. Use an email address you can access and a unique password.</p>
+      <div class="auth-upgrade-panel" id="auth-upgrade-panel" hidden>
+        <h2>Save this workspace</h2><p>Convert your guest workspace into a permanent account without losing its projects or datasets.</p>
+        <form id="auth-upgrade-form" class="auth-form">
+          <label for="auth-upgrade-name">Display name</label><input id="auth-upgrade-name" type="text" required maxlength="120" />
+          <label for="auth-upgrade-email">Email address</label><input id="auth-upgrade-email" type="email" required maxlength="320" />
+          <label for="auth-upgrade-password">Password</label><input id="auth-upgrade-password" type="password" required minlength="12" maxlength="128" />
+          <button type="submit" class="btn btn-primary full-width">Save account</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Runtime dependencies.
+# Minimums deliberately target releases with CPython 3.15 support/wheels.
+fastapi>=0.162.3,<1.0
+# Do not install uvicorn[standard] on this local-only app: the optional native
+# extras are unnecessary and may complicate cross-version Windows installs.
+uvicorn>=0.54.0,<1.0
+pydantic>=2.14.0,<3.0
+numpy>=2.5.5,<3.0
+scipy>=1.18.1,<2.0
+pandas>=3.0.6,<4.0
+openpyxl>=3.1.5,<4.0
+xlsxwriter>=3.3.1,<4.0
+python-multipart>=0.0.33,<1.0
+reportlab>=5.1.0,<6.0

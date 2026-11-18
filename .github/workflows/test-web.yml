@@ -1,0 +1,30 @@
+name: Test ORS public web edition
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-web:
+    runs-on: ubuntu-latest
+    env:
+      ORS_ENV: development
+      ORS_SESSION_SECRET: test-only-session-pepper
+      DATABASE_URL: sqlite://
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-web.txt
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements-web.txt pytest httpx
+      - run: python -m compileall -q backend
+      - run: python -m pytest -q

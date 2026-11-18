@@ -75,7 +75,7 @@ jobs:
           $hashes | Set-Content -Encoding ascii "SHA256SUMS.txt"
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ORS-Studio-Windows-x64-0.4.0
           path: |

@@ -65,9 +65,10 @@ Browser
 
 ## Runtime separation
 
-- Render Web Service: public HTTPS FastAPI + static frontend.
-- Render PostgreSQL: durable user/project/data store.
-- Render Key Value: private Redis-compatible queue and shared rate-limit counters.
-- Render Background Worker: RQ worker, no inbound public routes.
-- Render Cron: hourly cleanup of expired guest workspaces.
+- Netlify: public static frontend. A generated _redirects rule proxies /api/* to the Railway API so the browser uses one origin.
+- Railway API service: public HTTPS FastAPI service built from the root Dockerfile.
+- Railway PostgreSQL: durable user/project/data store, private networking only.
+- Railway Redis: private queue and shared rate-limit counters.
+- Railway worker service: RQ worker, no inbound public routes; uses the same image and database/Redis variables as the API.
+- Railway scheduled job: hourly cleanup of expired guest workspaces.
 - Desktop installer continues using local SQLite and loopback-only local API.

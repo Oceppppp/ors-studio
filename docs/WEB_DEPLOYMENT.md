@@ -1,78 +1,47 @@
-# Public Web Deployment — Render Blueprint
+# Public Web Deployment
 
-The repository contains `render.yaml` to describe the first hosted deployment. It provisions:
+The supported public hosting architecture for ORS Studio 0.4.0 is **Netlify + Railway**.
 
-- Public FastAPI web service (`ors-studio-web`).
-- Managed PostgreSQL (`ors-studio-postgres`).
-- Private Redis-compatible Key Value (`ors-studio-redis`).
-- Private RQ background worker (`ors-studio-worker`, initially two instances for independent batch tasks).
-- Hourly guest-data cleanup cron (`ors-studio-guest-cleanup`).
+- Netlify serves the static frontend from the repository's frontend directory.
+- Railway runs the FastAPI API, PostgreSQL, Redis, private RQ worker, and scheduled guest cleanup.
+- The browser calls same-origin /api/* paths. Netlify rewrites these requests to Railway using the generated frontend/_redirects file.
+- Guest and account sessions remain in HttpOnly Secure cookies on the Netlify site origin.
 
-The Blueprint uses paid starter resources for durable data and continuous worker availability. Render's free web services can spin down and lose local filesystem changes; free Postgres databases expire after 30 days and are not suitable for production data. Check Render pricing before applying the Blueprint.
+Follow the step-by-step [Netlify + Railway deployment guide](RAILWAY_NETLIFY_DEPLOYMENT.md).
 
-## Before deployment
+## Required configuration
 
-1. Publish this repository to `Oceppppp/ors-studio` with the `main` branch.
-2. Create a Render account and connect the GitHub repository.
-3. Open Render Dashboard → **New** → **Blueprint** and select this repository.
-4. Review the services and region. Singapore is selected as the initial region; it can be changed before provisioning.
-5. Review estimated costs and create the Blueprint. PostgreSQL and Redis should only accept private/internal connections.
-6. Wait for PostgreSQL, Key Value, worker, and web service to become healthy.
-7. Verify the web service health endpoint: `/api/health`.
-8. Test guest mode, registration/login, workspace isolation, upload, single analysis, batch analysis, and exports with two separate browser profiles.
+Netlify environment variable:
+- ORS_API_ORIGIN = the HTTPS public origin generated for the Railway API service (no trailing slash).
 
-## Environment configuration
+Railway API environment variables:
+- DATABASE_URL = reference to Railway PostgreSQL DATABASE_URL.
+- REDIS_URL = reference to Railway Redis REDIS_URL.
+- ORS_ENV = production.
+- ORS_COOKIE_SECURE = true.
+- ORS_SESSION_SECRET = long random secret generated in Railway.
+- ORS_ALLOWED_ORIGINS = exact Netlify origin, such as https://your-site.netlify.app.
+- PYTHONPATH = /app/backend.
 
-Render Blueprint generates `ORS_SESSION_SECRET`. `DATABASE_URL` and `REDIS_URL` are injected from private Render services. `ORS_ENV=production` and `ORS_COOKIE_SECURE=true` are set automatically.
+Railway worker environment variables:
+- DATABASE_URL and REDIS_URL references to the same PostgreSQL and Redis services.
+- ORS_ENV = production.
+- PYTHONPATH = /app/backend.
 
-Set `ORS_ALLOWED_ORIGINS` only when adding a deliberate same-origin-compatible public hostname. The service validates the request's Origin host against the request Host by default.
+The API runs Alembic migrations before starting. The worker uses scripts/start-railway-worker.sh. Guest cleanup is a Railway scheduled job that runs python -m orstudio.cleanup_guests hourly.
 
-## Custom domain
+## Local development
 
-After the first deploy:
-
-1. Open the web service in Render.
-2. Settings → Custom Domains → Add Custom Domain.
-3. Enter a domain you own, configure the DNS records shown by Render, and wait for certificate provisioning.
-4. Re-test login cookies and file uploads over HTTPS.
-
-A domain such as `ors-studio.com` is only an example; it is not registered by this project.
-
-## Local cloud stack (Docker)
-
-Copy `.env.example` to `.env`, change the development session secret, then run:
-
-```bash
+~~~bash
 docker compose -f compose.web.yaml up --build
-```
+~~~
 
-The Compose file starts PostgreSQL, Redis, the Web API, and the RQ worker. Open `http://localhost:8000`. Stop with Ctrl+C; data in the named Postgres volume persists between restarts.
+The local Docker stack provides PostgreSQL, Redis, Web API, and worker.
 
-## Database migrations
+## Operational caveats
 
-Render's web start command runs:
-
-```bash
-alembic upgrade head
-```
-
-Create a new Alembic revision whenever the cloud schema changes. Do not modify a database manually or rely on `create_all` for schema evolution. `cloud_store.init_db()` remains an idempotent first-run safety net.
-
-## Release and deployment sequence
-
-1. Push a reviewed commit to `main`.
-2. GitHub Actions runs the public-Web test workflow and the Windows Desktop build workflow.
-3. Render auto-deploys Web and worker from `main`.
-4. Confirm health and functional smoke tests.
-5. Create a version tag only after the deploy is verified; the Windows GitHub Release workflow publishes installer artifacts on tag push.
-
-## Rollback
-
-Use Render's Deploys page to roll back the Web and worker services to the previous known-good commit. Review database compatibility before rollback if a migration added or changed columns. Back up PostgreSQL before destructive schema migrations.
-
-## Current release caveats
-
-- This repository is prepared for deployment; a live public URL does not exist until the repository is published and the Blueprint is applied in your Render account.
-- Email verification and password recovery are not yet implemented. This is a public beta foundation and should not be advertised as a fully production-audited identity platform.
-- Dataset rows/columns are stored in PostgreSQL. Original uploaded binary workbooks are not currently retained in object storage.
-- Render services incur usage costs; the paid plans in the Blueprint are illustrative starter sizes, not a cost quote.
+- The Railway API, PostgreSQL, Redis, and worker are required for production batch processing. Do not deploy the Web API with ORS_ENV=production but without DATABASE_URL, REDIS_URL, and ORS_SESSION_SECRET.
+- Keep PostgreSQL, Redis, worker, and cleanup services private. Only the API receives a public domain.
+- Railway resources are usage-billed. Review the current plan and estimated usage in your Railway account before provisioning.
+- The original uploaded workbook binary is not retained; parsed rows and columns are stored in PostgreSQL.
+- Email verification, password recovery, independent security review, load testing, and backup-restore testing remain before a production-audited launch.

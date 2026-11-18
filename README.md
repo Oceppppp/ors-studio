@@ -6,29 +6,38 @@
 
 ### Public Web (multi-user)
 
-The Web edition uses FastAPI, PostgreSQL, Redis/RQ workers, and HttpOnly cookie sessions. Every project belongs to one principal (registered account or guest), and every project-scoped query is filtered by `owner_id`. Guests can try the app without signing in and have limited quotas with a 24-hour session. Users can register and sign in.
+The Web edition uses FastAPI, PostgreSQL, Redis/RQ workers, and HttpOnly cookie sessions. Every project belongs to one principal (registered account or guest), and every project-scoped query is filtered by owner_id. Guests can try the app without signing in and have limited quotas with a 24-hour session. Users can register and sign in.
 
-Run the web stack locally with Docker: copy `.env.example` to `.env`, replace the development secret, then run:
+### Public deployment: Netlify + Railway
 
-```bash
+- **Netlify** hosts the static frontend from the frontend directory.
+- **Railway** runs the Python FastAPI API, PostgreSQL, Redis, the private RQ worker, and scheduled guest cleanup.
+- Netlify rewrites browser requests from /api/* to the Railway API so session cookies remain same-origin from the browser's perspective.
+- The Railway API and worker share the same PostgreSQL database, Redis queue, and solver registry.
+
+Follow the complete [Netlify + Railway deployment guide](docs/RAILWAY_NETLIFY_DEPLOYMENT.md). The repository includes netlify.toml, a build-time proxy configuration script, a Railway Dockerfile, and railway.toml.
+
+### Local Web development
+
+Copy .env.example to .env, replace the development session secret, then run:
+
+~~~bash
 docker compose -f compose.web.yaml up --build
-```
+~~~
 
-Open `http://localhost:8000`. Apply database migrations with `alembic upgrade head`. The worker runs separately from the HTTP process.
-
-For public deployment, use `render.yaml` as a Render Blueprint. Read [Web Deployment](docs/WEB_DEPLOYMENT.md) and [Security Model](docs/SECURITY_MODEL.md). The Blueprint defines the FastAPI service, PostgreSQL, Redis-compatible Key Value, a background worker, and scheduled guest cleanup.
+Open http://localhost:8000. Apply database migrations with alembic upgrade head. The worker runs separately from the HTTP process.
 
 ### Desktop (local/offline)
 
 The Desktop edition works locally without an account. Data is stored in each computer user's profile using SQLite. Windows source setup supports Python 3.15.2; release installers bundle the runtime and dependencies.
 
-- Windows source setup: run `setup_windows.bat`, then `START_ORS.bat`.
-- Linux/macOS development: use `run_local.sh` and the developer guide.
+- Windows source setup: run setup_windows.bat, then START_ORS.bat.
+- Linux/macOS development: use run_local.sh and the developer guide.
 
 ## Modules and features
 
 - 29-module baseline across Operations Research, POM, and Quantitative Methods.
-- `.xlsx` and `.csv` import, preview, validation, worksheet selection, and column mapping.
+- XLSX and CSV import, preview, validation, worksheet selection, and column mapping.
 - Single analysis and batch job processing.
 - Forecast comparison with MAD, MSE, RMSE, MAPE, and holdout-MAD method selection.
 - Analysis results and Excel, CSV, and PDF exports.
@@ -36,19 +45,19 @@ The Desktop edition works locally without an account. Data is stored in each com
 
 ## Development and tests
 
-```bash
+~~~bash
 python -m pip install -r requirements-dev.txt
 PYTHONPATH=backend python -m pytest -q
-```
+~~~
 
-Web test/runtime dependencies are listed in `requirements-web.txt`. Render cloud runtime is pinned to Python 3.13.5; Windows Desktop source targets Python 3.15.2.
+Web test/runtime dependencies are listed in requirements-web.txt. Railway cloud runtime is pinned to Python 3.13.5; Windows Desktop source targets Python 3.15.2.
 
 ## Documentation
 
 - [User Guide](docs/PANDUAN_PENGGUNA.md)
-- [Web Deployment](docs/WEB_DEPLOYMENT.md)
-- [Security Model](docs/SECURITY_MODEL.md)
+- [Netlify + Railway Deployment](docs/RAILWAY_NETLIFY_DEPLOYMENT.md)
 - [Cloud Architecture](docs/CLOUD_ARCHITECTURE.md)
+- [Security Model](docs/SECURITY_MODEL.md)
 - [Technical Architecture](docs/TAD.md)
 - [Module Implementation Scope](docs/MODULE_IMPLEMENTATION_SCOPE.md)
 - [UI Design Review](docs/UI_DESIGN_REVIEW.md)

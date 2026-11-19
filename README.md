@@ -1,68 +1,101 @@
 # ORS Studio 0.4.0
 
-**Operations Research Studio** is a dual-distribution Operations Research and Quantitative Methods platform: a public multi-user Web edition (Guest Mode or account) and a local/offline Desktop edition. The baseline catalog contains 29 analysis modules; each module documents its supported models and limitations.
+**Operations Research Studio** is a modular Operations Research and Quantitative Methods application with 29 registered analysis modules. The recommended way to try ORS is to run it locally from a terminal. Each person runs their own copy on their computer; no cloud account or public server is needed for local use.
 
-## Choose how to use ORS
+**Bahasa Indonesia:** see [README_ID.md](README_ID.md) and the [Indonesian terminal quick-start](docs/QUICK_START_TERMINAL_ID.md).
 
-### Public Web (multi-user)
+## Quick start — Windows 10/11
 
-The Web edition uses FastAPI, PostgreSQL, Redis/RQ workers, and HttpOnly cookie sessions. Every project belongs to one principal (registered account or guest), and every project-scoped query is filtered by owner_id. Guests can try the app without signing in and have limited quotas with a 24-hour session. Users can register and sign in.
+Requirements: Windows 64-bit, Python 3.15.x (3.15.2 is supported), and internet access for the first dependency installation.
 
-### Public deployment: Netlify + Railway
+1. Download this repository using **Code → Download ZIP**, then extract it. Alternatively, clone it with Git:
 
-- **Netlify** hosts the static frontend from the frontend directory.
-- **Railway** runs the Python FastAPI API, PostgreSQL, Redis, the private RQ worker, and scheduled guest cleanup.
-- Netlify rewrites browser requests from /api/* to the Railway API so session cookies remain same-origin from the browser's perspective.
-- The Railway API and worker share the same PostgreSQL database, Redis queue, and solver registry.
+   ~~~cmd
+   git clone https://github.com/Oceppppp/ors-studio.git
+   cd ors-studio
+   ~~~
 
-Follow the complete [Netlify + Railway deployment guide](docs/RAILWAY_NETLIFY_DEPLOYMENT.md). The repository includes netlify.toml, a build-time proxy configuration script, a Railway Dockerfile, and railway.toml.
+2. Confirm Python is available:
 
-### Local Web development
+   ~~~cmd
+   py -3.15 --version
+   ~~~
 
-Copy .env.example to .env, replace the development session secret, then run:
+3. Run the setup script from File Explorer or Command Prompt:
+
+   ~~~cmd
+   setup_windows.bat
+   ~~~
+
+4. After setup completes, start ORS:
+
+   ~~~cmd
+   START_ORS.bat
+   ~~~
+
+5. Your browser opens the local application. Keep the terminal window open while using ORS; press Ctrl+C in that window to stop the server.
+
+**Do not type setup_windows.bat at the Python >>> prompt.** Batch files must be run from Windows File Explorer, Command Prompt, or PowerShell.
+
+Full instructions and troubleshooting: [Windows terminal quick-start (Indonesian)](docs/QUICK_START_TERMINAL_ID.md) · [Python 3.15 setup](docs/PYTHON_315_SETUP.md).
+
+## Quick start — macOS / Linux
+
+The repository includes run_local.sh. It creates a local virtual environment when one does not exist, installs the desktop runtime requirements, and starts the local app.
 
 ~~~bash
-docker compose -f compose.web.yaml up --build
+chmod +x run_local.sh
+./run_local.sh
 ~~~
 
-Open http://localhost:8000. Apply database migrations with alembic upgrade head. The worker runs separately from the HTTP process.
+A Python 3 installation and internet connection are needed for the first setup. See the [Developer Guide](docs/DEVELOPER_GUIDE.md) for environment details.
 
-### Desktop (local/offline)
+## What local mode means
 
-The Desktop edition works locally without an account. Data is stored in each computer user's profile using SQLite. Windows source setup supports Python 3.15.2; release installers bundle the runtime and dependencies.
+- The API binds to 127.0.0.1 only. It is intended for the computer running it, not as a public server.
+- Projects and datasets are stored in a separate local workspace for each computer user.
+- Windows data is stored under %LOCALAPPDATA%\ORS-Studio; macOS/Linux data is stored under ~/.ors-studio by default.
+- After dependencies are installed, local calculations can run without a cloud account. Do not share the local URL with friends expecting it to work on their devices.
 
-- Windows source setup: run setup_windows.bat, then START_ORS.bat.
-- Linux/macOS development: use run_local.sh and the developer guide.
+To let a friend use ORS, send them this public repository link: https://github.com/Oceppppp/ors-studio. They download the same source and run the quick-start steps on their own computer.
 
-## Modules and features
+## Application capabilities
 
-- 29-module baseline across Operations Research, POM, and Quantitative Methods.
-- XLSX and CSV import, preview, validation, worksheet selection, and column mapping.
-- Single analysis and batch job processing.
+- 29 registered module keys across Operations Research, Production/Operations Management, and Quantitative Methods.
+- CSV and XLSX import, worksheet selection, data preview, validation, and column mapping.
+- Single analysis and local batch processing.
 - Forecast comparison with MAD, MSE, RMSE, MAPE, and holdout-MAD method selection.
-- Analysis results and Excel, CSV, and PDF exports.
-- Web mode with guest/account identity, personal workspaces, and PostgreSQL tenant isolation.
+- Charts, analysis history, and Excel, CSV, and PDF exports.
+- Separate Public Web code path with Guest/Account sessions and tenant-aware PostgreSQL storage (optional cloud deployment; not required for local use).
+
+The 29 module keys do not imply that every advanced submodel in every POM-QM version is reproduced. See [Module Implementation Scope](docs/MODULE_IMPLEMENTATION_SCOPE.md) for each implemented model and its limitations.
 
 ## Development and tests
 
 ~~~bash
 python -m pip install -r requirements-dev.txt
-PYTHONPATH=backend python -m pytest -q
+python -m pytest -q
+python -m compileall -q backend run_app.py
 ~~~
 
-Web test/runtime dependencies are listed in requirements-web.txt. Railway cloud runtime is pinned to Python 3.13.5; Windows Desktop source targets Python 3.15.2.
+For the local desktop runtime, install dependencies from requirements.txt. For the cloud Web runtime, see requirements-web.txt.
+
+## Optional public Web deployment
+
+The repository also contains a separate multi-user Web edition. It requires a hosted Python API, PostgreSQL, Redis, and a background worker. The optional deployment path is [Netlify + Railway](docs/RAILWAY_NETLIFY_DEPLOYMENT.md). It is not needed to run the local application.
 
 ## Documentation
 
+- [Windows terminal quick-start — Indonesian](docs/QUICK_START_TERMINAL_ID.md)
+- [Python 3.15 setup and troubleshooting](docs/PYTHON_315_SETUP.md)
 - [User Guide](docs/PANDUAN_PENGGUNA.md)
-- [Netlify + Railway Deployment](docs/RAILWAY_NETLIFY_DEPLOYMENT.md)
+- [Developer Guide](docs/DEVELOPER_GUIDE.md)
+- [Module Catalog](docs/MODULE_CATALOG.md)
+- [Module Implementation Scope](docs/MODULE_IMPLEMENTATION_SCOPE.md)
+- [Netlify + Railway deployment (optional)](docs/RAILWAY_NETLIFY_DEPLOYMENT.md)
 - [Cloud Architecture](docs/CLOUD_ARCHITECTURE.md)
 - [Security Model](docs/SECURITY_MODEL.md)
-- [Technical Architecture](docs/TAD.md)
-- [Module Implementation Scope](docs/MODULE_IMPLEMENTATION_SCOPE.md)
-- [UI Design Review](docs/UI_DESIGN_REVIEW.md)
-- [Release & GitHub](docs/RELEASE_AND_GITHUB.md)
 
-## Release status
+## Data and privacy reminder
 
-ORS Studio 0.4.0 adds the Public Web multi-user foundation. Source and automated tests can be exercised locally. A live deployment, email verification/password recovery, independent security review, load testing, and the Windows installer built by GitHub Actions must be verified before calling the service production-ready.
+Local mode keeps files on the user's computer. If you report a problem on GitHub, never attach passwords, session cookies, private datasets, company data, or personal information.

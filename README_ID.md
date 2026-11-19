@@ -1,68 +1,85 @@
 # ORS Studio 0.4.0
 
-**Operations Research Studio** adalah platform Operations Research dan Quantitative Methods dengan dua jalur penggunaan: Web publik (Guest Mode atau akun) dan Desktop lokal/offline. Katalog baseline berisi 29 modul analisis; setiap modul menampilkan cakupan model dan batasan implementasinya.
+**Operations Research Studio** adalah aplikasi modular untuk Operations Research dan Quantitative Methods dengan 29 modul analisis terdaftar. Cara paling mudah untuk mencoba ORS adalah menjalankannya secara lokal melalui terminal. Setiap orang menjalankan salinan aplikasinya sendiri di komputer masing-masing; penggunaan lokal tidak membutuhkan akun cloud atau server publik.
 
-## Pilih cara menggunakan ORS
+## Mulai cepat — Windows 10/11
 
-### Public Web (multi-user)
+**Persyaratan:** Windows 64-bit, Python 3.15.x (Python 3.15.2 didukung), dan koneksi internet saat pertama kali memasang dependensi.
 
-Web edition menggunakan FastAPI, PostgreSQL, Redis/RQ worker, dan sesi berbasis cookie HttpOnly. Setiap proyek dimiliki satu principal (akun atau guest) dan semua query data proyek dibatasi dengan owner_id. Guest dapat langsung mencoba tanpa login; guest memiliki batas penyimpanan dan sesi 24 jam. Akun dapat mendaftar dan login.
+1. Buka repository [Oceppppp/ors-studio](https://github.com/Oceppppp/ors-studio).
+2. Klik **Code → Download ZIP**, lalu ekstrak file ZIP. Alternatifnya, gunakan Git:
 
-### Deployment publik: Netlify + Railway
+   ~~~cmd
+   git clone https://github.com/Oceppppp/ors-studio.git
+   cd ors-studio
+   ~~~
 
-- **Netlify** menjadi hosting frontend statis dari folder frontend.
-- **Railway** menjalankan backend Python FastAPI, PostgreSQL, Redis, private RQ worker, dan guest cleanup terjadwal.
-- Netlify melakukan rewrite request browser dari /api/* ke Railway API supaya cookie sesi tetap same-origin dari sudut pandang browser.
-- API dan worker menggunakan PostgreSQL, Redis, serta solver registry yang sama.
+3. Pastikan Python 3.15 tersedia:
 
-Ikuti [Panduan Deployment Netlify + Railway](docs/RAILWAY_NETLIFY_DEPLOYMENT.md). Repository sudah menyertakan netlify.toml, script proxy saat build, Dockerfile Railway, dan railway.toml.
+   ~~~cmd
+   py -3.15 --version
+   ~~~
 
-### Web development lokal
+4. Buka folder ORS, lalu jalankan setup_windows.bat dari File Explorer atau Command Prompt:
 
-Salin .env.example menjadi .env, ganti development session secret, lalu jalankan:
+   ~~~cmd
+   setup_windows.bat
+   ~~~
 
-~~~bash
-docker compose -f compose.web.yaml up --build
-~~~
+5. Setelah setup selesai, jalankan:
 
-Buka http://localhost:8000. Jalankan migrasi dengan alembic upgrade head. Worker berjalan terpisah dari HTTP process.
+   ~~~cmd
+   START_ORS.bat
+   ~~~
 
-### Desktop (lokal/offline)
+6. Browser akan membuka ORS secara otomatis. Biarkan jendela terminal tetap terbuka selama aplikasi digunakan. Tekan Ctrl+C pada jendela tersebut untuk menghentikan server.
 
-Pengguna dapat menggunakan aplikasi lokal tanpa akun. Data tersimpan di profil komputer masing-masing menggunakan SQLite. Setup Windows mendukung Python 3.15.2 untuk source mode; installer release membundel runtime dan dependensi.
+**Penting:** jangan mengetik setup_windows.bat pada Python Shell yang menampilkan prompt >>>. File .bat harus dijalankan dari File Explorer, Command Prompt, atau PowerShell.
 
-- Windows source setup: setup_windows.bat lalu START_ORS.bat.
-- Linux/macOS source development: gunakan run_local.sh dan dokumentasi developer.
+Panduan lengkap, screenshot langkah, dan troubleshooting: [Panduan Menjalankan ORS dari Terminal](docs/QUICK_START_TERMINAL_ID.md).
 
-## Modul dan fitur
+## Mulai cepat — macOS / Linux
 
-- 29 modul katalog baseline Operations Research, POM, dan Quantitative Methods.
-- Import XLSX dan CSV, preview, validasi, pemilihan worksheet, dan column mapping.
-- Single analysis dan batch processing.
-- Forecast comparison dengan MAD, MSE, RMSE, MAPE, dan pemilihan metode berdasarkan holdout MAD.
-- Hasil analisis serta export Excel, CSV, dan PDF.
-- Web multi-user dengan Guest/Account Mode, personal workspace, dan isolasi tenant PostgreSQL.
-
-## Development dan testing
+Repository sudah menyediakan run_local.sh. Script akan membuat virtual environment lokal jika belum ada, memasang dependensi aplikasi lokal, lalu menjalankan ORS.
 
 ~~~bash
-python -m pip install -r requirements-dev.txt
-PYTHONPATH=backend python -m pytest -q
+chmod +x run_local.sh
+./run_local.sh
 ~~~
 
-Dependensi Web ada di requirements-web.txt. Runtime cloud Railway menggunakan Python 3.13.5; source Desktop Windows menggunakan Python 3.15.2.
+Python 3 dan internet diperlukan saat pemasangan pertama. Lihat [Developer Guide](docs/DEVELOPER_GUIDE.md) untuk detail lingkungan pengembangan.
+
+## Bagaimana cara kerja mode lokal?
+
+- Backend hanya menerima koneksi dari 127.0.0.1 pada komputer yang menjalankan ORS. Ini bukan server publik atau server jaringan lokal.
+- Setiap komputer mempunyai workspace dan database lokal masing-masing.
+- Di Windows, data disimpan di %LOCALAPPDATA%\ORS-Studio.
+- Di macOS/Linux, data disimpan di ~/.ors-studio secara default.
+- Setelah dependensi terpasang, analisis dapat dijalankan tanpa login cloud.
+
+Untuk memberikan ORS kepada teman, bagikan link repository ini: https://github.com/Oceppppp/ors-studio. Teman Anda mengunduh source yang sama, lalu menjalankan langkah instalasi pada komputer mereka sendiri.
+
+## Fitur aplikasi
+
+- 29 module keys untuk Operations Research, Production/Operations Management, dan Quantitative Methods.
+- Import CSV dan XLSX, pemilihan worksheet, preview, validasi, dan column mapping.
+- Single analysis dan batch processing lokal.
+- Perbandingan forecasting dengan MAD, MSE, RMSE, MAPE, serta pemilihan metode berdasarkan holdout MAD.
+- Grafik, riwayat analisis, dan ekspor Excel, CSV, serta PDF.
+- Kode Public Web terpisah dengan Guest/Account Mode dan PostgreSQL (opsional; tidak diperlukan untuk menjalankan aplikasi lokal).
+
+Jumlah 29 module keys bukan berarti seluruh submodel lanjutan di setiap versi POM-QM sudah direplikasi. Periksa [Module Implementation Scope](docs/MODULE_IMPLEMENTATION_SCOPE.md) untuk cakupan dan batasan setiap solver.
 
 ## Dokumentasi
 
+- [Panduan Menjalankan ORS dari Terminal](docs/QUICK_START_TERMINAL_ID.md)
+- [Panduan Python 3.15 dan Troubleshooting](docs/PYTHON_315_SETUP.md)
 - [Panduan Pengguna](docs/PANDUAN_PENGGUNA.md)
-- [Panduan Deployment Netlify + Railway](docs/RAILWAY_NETLIFY_DEPLOYMENT.md)
-- [Arsitektur Cloud](docs/CLOUD_ARCHITECTURE.md)
-- [Model Keamanan](docs/SECURITY_MODEL.md)
-- [Technical Architecture](docs/TAD.md)
-- [Cakupan Implementasi Modul](docs/MODULE_IMPLEMENTATION_SCOPE.md)
-- [UI Design Review](docs/UI_DESIGN_REVIEW.md)
-- [Release & GitHub](docs/RELEASE_AND_GITHUB.md)
+- [Developer Guide](docs/DEVELOPER_GUIDE.md)
+- [Katalog 29 Modul](docs/MODULE_CATALOG.md)
+- [Cakupan Implementasi Solver](docs/MODULE_IMPLEMENTATION_SCOPE.md)
+- [Deployment Netlify + Railway (opsional)](docs/RAILWAY_NETLIFY_DEPLOYMENT.md)
 
-## Status rilis
+## Pengingat privasi
 
-ORS Studio 0.4.0 menyediakan fondasi Web multi-user. Source dan automated tests dapat dijalankan secara lokal. Deployment publik, email verification/password recovery, independent security review, load testing, dan installer Windows hasil GitHub Actions masih harus diverifikasi sebelum layanan dinyatakan production-ready.
+Mode lokal menyimpan data di komputer masing-masing. Saat melaporkan bug ke GitHub, jangan mengunggah password, session cookie, dataset pribadi, data perusahaan rahasia, atau informasi pribadi.
